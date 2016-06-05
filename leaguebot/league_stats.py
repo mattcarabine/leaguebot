@@ -10,7 +10,7 @@ def show_index():
     player_q = buckets.match_history.query('player', 'all_players')
     player_count = sum(1 for _ in player_q)
 
-    match_q = buckets.match_history.query('match', 'all_matches')
+    match_q = buckets.match_history.query('match', 'all_matches', reduce=False)
     match_count = sum(1 for _ in match_q)
 
     return render_template('pages/index.html', player_count=player_count,

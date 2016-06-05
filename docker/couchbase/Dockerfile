@@ -1,1 +1,1 @@
-FROM couchbase/server:enterprise-4.1.0
+FROM couchbase/server:4.5.0-beta

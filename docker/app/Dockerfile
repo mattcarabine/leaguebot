@@ -11,5 +11,5 @@ RUN dpkg -i libcouchbase-2.5.6_wheezy_amd64/*.deb
 ADD requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-CMD python /leaguestats.py 
+CMD python /leaguebot/league_stats.py 
 

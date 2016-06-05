@@ -1,9 +1,38 @@
+app:
+  container_name: app
+  build: .
+  env_file:
+      - .env
+  dockerfile: docker/app/Dockerfile
+  external_links:
+      - couchbase:db
+  volumes:
+      - ./leaguebot:/leaguebot
+      - /var/lib/docker:/docker
+  ports:
+      - "5000:5000"
+
+nginx:
+  container_name: nginx
+  build: .
+  dockerfile: docker/nginx/Dockerfile
+  external_links:
+    - couchbase:db
+  links:
+      - app
+  volumes:
+      - ./leaguebot:/leaguebot
+  ports:
+      - "80:80"
+      - "8092:8092"
+      - "8093:8093"
+
 discordbot:
   container_name: discordbot
   build: .
   env_file:
       - .env
-  dockerfile: docker/bot/Dockerfile
+  dockerfile: docker/discordbot/Dockerfile
   external_links:
       - couchbase:db
   volumes:
