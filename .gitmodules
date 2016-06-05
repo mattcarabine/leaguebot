@@ -1,0 +1,3 @@
+[submodule "lib/discord-bot"]
+	path = lib/discord-bot
+	url = git@github.com:mattcarabine/league-discordbot.git
