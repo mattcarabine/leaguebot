@@ -1,0 +1,49 @@
+discordbot:
+  container_name: discordbot
+  build: .
+  env_file:
+      - .env
+  dockerfile: docker/bot/Dockerfile
+  external_links:
+      - couchbase:db
+  volumes:
+      - .:/discord-bot
+  ports:
+      - "18334:80"
+  restart: always
+
+datapopulator:
+  container_name: datapopulator
+  build: .
+  env_file:
+      - .env
+  dockerfile: docker/match-history/Dockerfile
+  external_links:
+    - couchbase:db
+  volumes:
+      - .:/discord-bot
+  ports:
+      - "18335:80"
+  restart: always
+
+backup:
+  container_name: backup
+  build: .
+  env_file:
+      - .env
+  dockerfile: docker/backup/Dockerfile
+  external_links:
+      - couchbase:db
+  volumes:
+      - /opt/docker/backup:/backup
+
+restore:
+  container_name: restore
+  build: .
+  env_file:
+      - .env
+  dockerfile: docker/restore/Dockerfile
+  external_links:
+      - couchbase:db
+  volumes:
+      - /opt/docker/restore:/backup
