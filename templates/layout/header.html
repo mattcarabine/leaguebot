@@ -1,0 +1,58 @@
+<!-- Logo -->
+<a href="/" class="logo">
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini"><i class="menu-icon fa fa-plus fa-lg"></i></span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg">League <b>Statbot</b></span>
+</a>
+
+<!-- Header Navbar -->
+<nav class="navbar navbar-static-top" role="navigation">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+    </a>
+    <!-- Navbar Right Menu -->
+
+    <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+        <li>
+          <form action="#" method="get" class="navbar-form" id="navbar-search">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search Players....">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+        </form>
+        </li>
+          {% if current_user %}
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-cogs"></i>
+              <span class="hidden-xs">{{ current_user.username }}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- User image -->
+              <li class="user-header">
+                <i class="fa fa-cogs fa-5x" style="color: white;"></i>
+
+                <p>
+                  {{ current_user.username }}
+                </p>
+              </li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+    </div>
+</nav>
+<script>
+    var searchbase = '/player';
+    $(document).ready(function() {
+        $('#navbar-search').submit(function() {
+            window.location.href = searchbase + '/' + $('#navbar-search input').val();
+            return false;
+        })
+    });
+    </script>

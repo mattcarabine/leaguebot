@@ -1,0 +1,20 @@
+{% macro top_link(name, text, icon="link") -%}
+{% if name != _route_name %}
+<li><a href="{{ name }}"><i class="fa fa-fw fa-{{icon}}"></i> <span>{{text}}</span></a></li>
+{% else %}
+<li class="active"><a href="{{ name }}"><i class="fa fa-{{icon}}"></i> <span>{{text}}</span></a></li>
+{% endif %}
+{%- endmacro %}
+
+<!-- sidebar: style can be found in sidebar.less -->
+<section class="sidebar">
+    <!-- Sidebar Menu -->
+    <ul class="sidebar-menu">
+        {{ top_link('', 'Home', 'home') }}
+    </ul><!-- /.sidebar-menu -->
+    <!-- Sidebar Menu -->
+    <ul class="sidebar-menu">
+        {{ top_link('players', 'Players', 'user') }}
+    </ul><!-- /.sidebar-menu -->
+</section>
+<!-- /.sidebar -->

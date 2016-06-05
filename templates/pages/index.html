@@ -1,0 +1,35 @@
+{% extends "layout/root.html" %}
+{% block title %}Main Page{% endblock %}
+{% block description %}Work in progress{% endblock %}
+{% block breadcrumbs %}
+<li><i class="fa fa-dashboard"></i> Dashboard</li>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Players</span>
+                <span class="info-box-number">{{ player_count }}</span>
+            </div><!-- /.info-box-content -->
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-play"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Matches</span>
+                <span class="info-box-number">{{ match_count }}</span>
+            </div><!-- /.info-box-content -->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+{% endblock %}

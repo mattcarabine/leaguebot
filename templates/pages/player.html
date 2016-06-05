@@ -1,0 +1,61 @@
+{% extends "layout/root.html" %}
+{% block title %}Player - {{ player_name }}{% endblock %}
+{% block description %}Stats{% endblock %}
+{% block breadcrumbs %}
+    <li><i class="fa fa-dashboard"></i> Dashboard</li>
+{% endblock %}
+
+
+{% block content %}
+    <!-- Single button -->
+    <div class="text-right">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Action <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li class="input-group">
+                    <input type="checkbox" value="RANKED_SOLO_5x5" size="5" checked> Ranked
+                </li>
+                <li class="input-group">
+                    <input type="checkbox" value="NORMAL" size="10" checked> Normal
+                </li>
+                <li class="input-group">
+                    <input type="checkbox" value="ARAM_UNRANKED_5x5" checked> ARAM
+                </li>
+            </ul>
+        </div>
+        <p></p>
+    </div>
+    {% for match in matches| sort(attribute='gameId') | reverse%}
+        {% if match['gameMode'] in ['CLASSIC', 'ARAM'] and match['gameType'] == 'MATCHED_GAME' %}
+            <div class="box box-solid box-{{ 'success' if match['stats']['win'] else 'danger' }} collapsed-box {{ match['subType'] }}">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><img src="http://ddragon.leagueoflegends.com/cdn/6.11.1/img/champion/{{ champions[match['championId']]['key'] }}.png" width="30" height="30">  {{match['stats']['championsKilled'] or 0}}/{{ match['stats']['numDeaths'] or 0 }}/{{ match['stats']['assists'] or 0}}</h3>
+                    <span class="pull-right">{{ epoch_to_datetime(match['createDate']/1000) }}
+                        <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                        </button>
+                    </div></span>
+
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    {{match}}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        {% endif %}
+    {% endfor %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('input[type="checkbox"]').click(function(){
+                $("."+$(this).attr("value")).toggle();
+            });
+        });
+    </script>
+{% endblock %}

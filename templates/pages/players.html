@@ -1,0 +1,18 @@
+{% extends "layout/root.html" %}
+{% block title %}Player - {{ player_name }}{% endblock %}
+{% block description %}Stats{% endblock %}
+{% block breadcrumbs %}
+<li><i class="fa fa-dashboard"></i> Dashboard</li>
+{% endblock %}
+
+
+{% block content %}
+{% for player in players %}
+    <div class="box box-solid box-primary">
+    <div class="box-header">{{ player['name'] }}<a href="/player/{{ player['name'] }}" class="pull-right"> Profile </a></div>
+
+    </div>
+{% endfor %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+{% endblock %}
