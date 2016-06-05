@@ -4,7 +4,8 @@ import riotwatcher
 import sys
 import time
 
-from manager.manager import FileManager, CouchbaseManager, FileNotFoundError
+from couchbase import exceptions as cb_exceptions
+from couchbase.bucket import Bucket
 
 SLEEP_TIME = 15
 
@@ -18,52 +19,48 @@ logger_datapop.setLevel(logging.DEBUG)
 logger_datapop.addHandler(stream_handler)
 
 
-class MatchHistoryUpdater():
+class MatchHistoryUpdater(object):
     def __init__(self):
         self.riot = riotwatcher.RiotWatcher(
             default_region=riotwatcher.EUROPE_WEST,
             key=os.environ.get('RIOT_API_KEY'))
-        self.storage_manager = CouchbaseManager(
-            os.environ.get('MATCH_HISTORY_BUCKET'))
+        self.bucket = Bucket('couchbase://{}/{}'.format(
+            os.environ.get('DB_HOST', 'localhost'),
+            os.environ.get('DB_BUCKET_MATCH_HISTORY', 'match_history')
+        ))
 
-        self.player_dict = self.storage_manager.get('players')
+        self.players = self.get_players()
         logger_datapop.info('Setup complete')
         while True:
-            for _, player_id in self.player_dict.iteritems():
-                self.update_recent_games(player_id)
+            for player in self.players:
+                self.update_recent_games(player['id'])
                 time.sleep(SLEEP_TIME)
-            self.player_dict = self.get_players()
+            self.players = self.get_players()
 
     def get_players(self):
-        try:
-            player_dict = self.storage_manager.get('players')
-        except FileNotFoundError:
-            player_dict = self.riot.get_summoners(names=['Loltown'])
-            self.storage_manager.set('players', player_dict)
-        return player_dict
+        players = [row.doc.value for row in self.bucket.query(
+            'player', 'all_players', stale=False, include_docs=True)]
+        return players
 
     def update_recent_games(self, player_id):
-        api_matches = self.riot.get_recent_games(player_id)
-        key = 'matches-{}'.format(player_id)
-        try:
-            db_matches = self.storage_manager.get(key)
-        except FileNotFoundError:
-            self.storage_manager.set(key, api_matches)
-        else:
-            game_ids = list()
-            for db_match in db_matches['games']:
-                game_ids.append(db_match['gameId'])
+        api_matches = self.riot.get_recent_games(player_id)['games']
+        for match in api_matches:
+            match['summonerId'] = player_id
+            key = 'Match::{}::{}'.format(player_id, match['gameId'])
+            try:
+                self.bucket.insert(key, match)
+            except cb_exceptions.KeyExistsError:
+                break
 
-            for api_match in api_matches['games']:
-                if api_match['gameId'] in game_ids:
-                    break
-                else:
-                    db_matches['games'].insert(0, api_match)
-                    logger_datapop.info('Added game {} to {}'.format(
-                        api_match['gameId'], player_id))
-
-            self.storage_manager.set(key, db_matches)
-            logger_datapop.debug('Updated {}'.format(key))
+            try:
+                full_match = self.riot.get_match(match_id=match['gameId'],
+                                                 include_timeline=True)
+                time.sleep(SLEEP_TIME)
+            except Exception:
+                continue
+            else:
+                full_match_key = 'Match::{}'.format(match['gameId'])
+                self.bucket.upsert(full_match_key, full_match)
 
 if __name__ == '__main__':
     MatchHistoryUpdater()

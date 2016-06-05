@@ -7,9 +7,9 @@ RUN wget http://packages.couchbase.com/clients/c/libcouchbase-2.5.3_wheezy_amd64
 RUN tar xf libcouchbase-2.5.3_wheezy_amd64.tar
 RUN dpkg -i libcouchbase-2.5.3_wheezy_amd64/*.deb
 
-ADD requirements.txt requirements.txt
+ADD leaguebot/lib/datapopulator/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-ADD docker/match-history/run.sh /run.sh
+ADD docker/data_populator/run.sh /run.sh
 RUN chmod +x /run.sh
 CMD /run.sh

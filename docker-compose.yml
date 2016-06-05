@@ -42,15 +42,15 @@ discordbot:
   restart: always
 
 datapopulator:
-  container_name: datapopulator
+  container_name: data_populator
   build: .
   env_file:
       - .env
-  dockerfile: docker/match-history/Dockerfile
+  dockerfile: docker/data_populator/Dockerfile
   external_links:
     - couchbase:db
   volumes:
-      - .:/discord-bot
+      - ./leaguebot:/leaguebot
   ports:
       - "18335:80"
   restart: always
