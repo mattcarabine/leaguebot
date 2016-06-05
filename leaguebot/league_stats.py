@@ -55,5 +55,9 @@ def show_player(player_name):
                            matches=matches, champions=champions,
                            epoch_to_datetime=utils.epoch_to_datetime)
 
+@app.route('/memes')
+def show_memes():
+    memes = buckets.match_history.get('memes').value
+    return render_template('pages/memes.html', memes=memes)
 if __name__ == '__main__':
     app.run(debug=True, port=5000, host='0.0.0.0')

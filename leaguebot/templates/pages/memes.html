@@ -1,0 +1,22 @@
+{% extends "layout/root.html" %}
+{% block title %}Memes{% endblock %}
+{% block description %}rl dank{% endblock %}
+{% block breadcrumbs %}
+<li><i class="fa fa-dashboard"></i> Dashboard</li>
+{% endblock %}
+
+
+{% block content %}
+{% for meme in memes %}
+    <div class="box box-default">
+  <div class="box-body">
+      <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+    </div><!-- /.box-tools -->
+    {{meme}}
+  </div><!-- /.box-body -->
+</div><!-- /.box -->
+    {%  endfor  %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+{% endblock %}
