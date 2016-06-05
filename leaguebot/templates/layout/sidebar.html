@@ -1,8 +1,8 @@
 {% macro top_link(name, text, icon="link") -%}
 {% if name != _route_name %}
-<li><a href="{{ name }}"><i class="fa fa-fw fa-{{icon}}"></i> <span>{{text}}</span></a></li>
+<li><a href="{{ url_for(name) }}"><i class="fa fa-fw fa-{{icon}}"></i> <span>{{text}}</span></a></li>
 {% else %}
-<li class="active"><a href="{{ name }}"><i class="fa fa-{{icon}}"></i> <span>{{text}}</span></a></li>
+<li class="active"><a href="{{ url_for(name) }}"><i class="fa fa-{{icon}}"></i> <span>{{text}}</span></a></li>
 {% endif %}
 {%- endmacro %}
 
@@ -10,11 +10,11 @@
 <section class="sidebar">
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu">
-        {{ top_link('', 'Home', 'home') }}
+        {{ top_link('show_index', 'Home', 'home') }}
     </ul><!-- /.sidebar-menu -->
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu">
-        {{ top_link('players', 'Players', 'user') }}
+        {{ top_link('show_players', 'Players', 'user') }}
     </ul><!-- /.sidebar-menu -->
 </section>
 <!-- /.sidebar -->
